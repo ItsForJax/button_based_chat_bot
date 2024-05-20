@@ -94,16 +94,8 @@ public class ChatAdapter extends RecyclerView.Adapter<MainViewHolder> {
         } else if (holder instanceof BotViewHolder) {
             ChatItem.Bot botItem = (ChatItem.Bot) items.get(position);
             ((BotViewHolder) holder).botTextView.setText(botItem.message);
-
         } else if (holder instanceof FormViewHolder) {
-            ChatItem.Form form = (ChatItem.Form) items.get(position);
             FormViewHolder formView = (FormViewHolder) holder;
-
-            boolean scholarshipForm =  formView.scholarShipForm.isChecked();
-            boolean LOR = formView.LOR.isChecked();
-            boolean TOR = formView.TOR.isChecked();
-            boolean PSA_NSO = formView.PSA_NSO.isChecked();
-            boolean studentForm = formView.StudentForm.isChecked();
 
             formView.cancel.setOnClickListener(v -> {
                 cancelListener.onCancelClicked(formView);
@@ -116,20 +108,51 @@ public class ChatAdapter extends RecyclerView.Adapter<MainViewHolder> {
             ChatItem.Options options = (ChatItem.Options) items.get(position);
             OptionsViewHolder optionsViewHolder = (OptionsViewHolder) holder;
             optionsViewHolder.optionsLayout.removeAllViews();
+
+            // Flag to track if a button has been clicked
+            boolean[] buttonClicked = {false};
+
             for (int i = 0; i < options.questions.size(); i++) {
                 String question = options.questions.get(i);
                 View buttonView = LayoutInflater.from(context).inflate(R.layout.button_option, optionsViewHolder.optionsLayout, false);
                 Button button = buttonView.findViewById(R.id.option_button);
                 button.setText(question);
-                button.setOnClickListener(v -> listener.onItemClick(question));
 
+                // Set OnClickListener
+                button.setOnClickListener(v -> {
+                    if (!buttonClicked[0]) {
+                        // Disable all buttons
+                        for (int j = 0; j < optionsViewHolder.optionsLayout.getChildCount(); j++) {
+                            View child = optionsViewHolder.optionsLayout.getChildAt(j);
+                            if (child instanceof ViewGroup) {
+                                ViewGroup childGroup = (ViewGroup) child;
+                                for (int k = 0; k < childGroup.getChildCount(); k++) {
+                                    View childButtonView = childGroup.getChildAt(k);
+                                    if (childButtonView instanceof Button) {
+                                        childButtonView.setEnabled(false);
+                                    }
+                                }
+                            } else if (child instanceof Button) {
+                                child.setEnabled(false);
+                            }
+                        }
+
+                        // Set the flag to true to prevent further clicks
+                        buttonClicked[0] = true;
+
+                        // Perform the click action for the pressed button
+                        listener.onItemClick(question);
+                    }
+                });
+
+                // Apply animation
                 Animation popInOutAnimation = AnimationUtils.loadAnimation(context, R.anim.pop_in_out);
-                popInOutAnimation.setStartOffset((i+1) * 200); // 100ms delay between each button
+                popInOutAnimation.setStartOffset((i + 1) * 100L); // 200ms delay between each button
                 buttonView.startAnimation(popInOutAnimation);
 
+                // Add the button view to the layout
                 optionsViewHolder.optionsLayout.addView(buttonView);
             }
-
         }
     }
 
