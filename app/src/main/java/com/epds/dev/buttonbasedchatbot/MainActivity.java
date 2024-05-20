@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
         adapter.notifyItemRemoved(chatItems.size());
         chatItems.add(new ChatItem.Bot("You have cancelled the form, Goodbye!"));
         chatItems.add(new ChatItem.Bot("Thank you for using our service!"));
+        chatItems.add(new ChatItem.Bot("Anything else you would like to ask? \n1. Yes\n2. No"));
+        chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
         adapter.notifyItemInserted(chatItems.size() - 1);
     }
 
@@ -71,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
         chatItems.remove(chatItems.size() - 1);
         adapter.notifyItemRemoved(chatItems.size());
         chatItems.add(new ChatItem.Bot("You have already submitted the following forms: " + concatenatedString));
-        Log.i("Submitted Form", "You have already submitted the following forms: " + concatenatedString);
+        chatItems.add(new ChatItem.Bot("Anything else you would like to ask? \n1. Yes\n2. No"));
+        chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
         adapter.notifyItemInserted(chatItems.size() - 1);
         recyclerView.smoothScrollToPosition(chatItems.size() - 1);
     }
@@ -93,9 +96,8 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
     public void onItemClick(String position) {
         chatItems.remove(chatItems.size()-1);
         adapter.notifyItemRemoved(chatItems.size());
-
-        chatItems.add(new ChatItem.User("Seleted: " + position));
-
+        boolean newInter = false;
+        chatItems.add(new ChatItem.User("Selected: " + position));
         if (currentIndex == 0) {
             if (position.equals("1") && lastChosen == null) {
                 chatItems.add(new ChatItem.Bot("Have you received your STIPEND allowance?\n1. Yes\n2. No"));
@@ -119,15 +121,94 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
                 chatItems.add(new ChatItem.Bot("Have you received your ONE-TIME FINANCIAL allowance?\n1. Yes\n2. No"));
                 chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
             }
-        } else if (currentIndex == 1) {
+        }
+
+        else if (currentIndex == 1) {
             if (lastChosen.equals("1")) {
-                chatItems.add(new ChatItem.Bot("Congratulations! You have received your STIPEND allowance!"));
-                chatItems.add(new ChatItem.Form());
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your STIPEND allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your STIPEND allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
+            }
+            if (lastChosen.equals("2")) {
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your BOOK allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your BOOK allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
+            }
+            if (lastChosen.equals("3")) {
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your LAPTOP allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your LAPTOP allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
+            }
+            if (lastChosen.equals("4")) {
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your THESIS allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your THESIS allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
+            }
+            if (lastChosen.equals("5")) {
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your OJT allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your OJT allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
+            }
+            if (lastChosen.equals("6")) {
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your ONE-TIME ATTENDANCE allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your ONE-TIME ATTENDANCE allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
+            }
+            if (lastChosen.equals("7")) {
+                if (position.equals("1")) {
+                    chatItems.add(new ChatItem.Bot("Congratulations! You have received your ONE-TIME FINANCIAL allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                } else {
+                    chatItems.add(new ChatItem.Bot("Sorry to here that you have not received your ONE-TIME FINANCIAL allowance!"));
+                    chatItems.add(new ChatItem.Form());
+                }
             }
         }
 
-        currentIndex++;
-        lastChosen = position;
+        else if (currentIndex == 2) {
+            if (position.equals("1")) {
+                newInter = true;
+                lastChosen = null;
+                currentIndex = 0;
+                chatItems.add(new ChatItem.Bot(getString(R.string.allowance_type)));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2", "3", "4", "5", "6", "7")));
+            } else if (position.equals("2")) {
+                chatItems.add(new ChatItem.Bot("Thank you for your time!"));
+            }
+        }
+
+
+
+        if (!newInter){
+            currentIndex++;
+            lastChosen = position;
+        }
+
+
 
         adapter.notifyItemInserted(chatItems.size() - 1);
         recyclerView.smoothScrollToPosition(chatItems.size() - 1);
