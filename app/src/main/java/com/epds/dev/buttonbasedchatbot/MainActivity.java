@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ChatAdapter.OnItemClickListener {
-    // Hello
+    // Helloasdasdkkkkkk
     String lastChosen;
     int currentIndex = 0;
     ArrayList<ChatItem> chatItems;
