@@ -2,4 +2,12 @@
     <string name="app_name">Button Based Chat Bot</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="allowance_type">Hello! I\'m a primary chatbot. To which of the following allowance type is your concern about?
+        \n1.Stipend
+        \n2.Book
+        \n3.Laptop
+        \n4.Thesis
+        \n5.OJT
+        \n6.One-time attendance conference
+        \n7.One-time financial assistance?"</string>
 </resources>
