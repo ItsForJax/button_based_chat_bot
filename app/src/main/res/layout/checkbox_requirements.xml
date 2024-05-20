@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bot_message_last"
+    android:layout_margin="4dp"
+    android:layout_marginStart="0dp"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Please check all the submitted requirements below. Then click submit"/>
+
+    <CheckBox
+        android:id="@+id/PSA_NSO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Birth Certificate" />
+
+    <CheckBox
+        android:id="@+id/StudentForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Student Form" />
+
+    <CheckBox
+        android:id="@+id/TOR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Transcript of Record (TOR)" />
+
+    <CheckBox
+        android:id="@+id/scholarShipForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Scholarship Form" />
+
+    <CheckBox
+        android:id="@+id/LOR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Letter of Recommendation" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/submitFormConfirm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="2dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#4CAF50"
+            android:text="Submit" />
+
+        <Button
+            android:id="@+id/submitFormCancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="2dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF0000"
+            android:text="Cancel" />
+
+    </LinearLayout>
+
+</LinearLayout>
