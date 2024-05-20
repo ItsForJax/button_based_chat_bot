@@ -1,6 +1,7 @@
 package com.epds.dev.buttonbasedchatbot;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -19,7 +20,6 @@ import com.epds.dev.buttonbasedchatbot.viewholder.FormViewHolder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ChatAdapter.OnItemClickListener {
     // Hi
@@ -42,9 +42,8 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
 
         chatItems = new ArrayList<>();
 
-        //Bot starter
-        chatItems.add(new ChatItem.Bot("Hello there! Is it hot today?\n1. Yes\n2. No"));
-        chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+        chatItems.add(new ChatItem.Bot(getString(R.string.allowance_type)));
+        chatItems.add(new ChatItem.Options(Arrays.asList("1", "2", "3", "4", "5", "6", "7")));
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
         chatItems.remove(chatItems.size() - 1);
         adapter.notifyItemRemoved(chatItems.size());
         chatItems.add(new ChatItem.Bot("You have cancelled the form, Goodbye!"));
+        chatItems.add(new ChatItem.Bot("Thank you for using our service!"));
         adapter.notifyItemInserted(chatItems.size() - 1);
     }
 
@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
 
         chatItems.remove(chatItems.size() - 1);
         adapter.notifyItemRemoved(chatItems.size());
-        chatItems.add(new ChatItem.Bot("You have submitted the following forms: " + concatenatedString));
+        chatItems.add(new ChatItem.Bot("You have already submitted the following forms: " + concatenatedString));
+        Log.i("Submitted Form", "You have already submitted the following forms: " + concatenatedString);
         adapter.notifyItemInserted(chatItems.size() - 1);
         recyclerView.smoothScrollToPosition(chatItems.size() - 1);
     }
@@ -95,22 +96,34 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
 
         chatItems.add(new ChatItem.User("Seleted: " + position));
 
-        if (currentIndex == 0 && position.equals("1") && lastChosen == null) {
-            chatItems.add(new ChatItem.Bot("Have you drunk anything today?\n1. Yes\n2. No"));
-            chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
-        } else if (currentIndex == 0 && position.equals("2") && lastChosen == null) {
-            chatItems.add(new ChatItem.Bot("Is it raining?\n1. Yes\n2. No"));
-            chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
-        } else if (currentIndex == 1 && Objects.equals(lastChosen, "1") && position.equals("1")) {
-            chatItems.add(new ChatItem.Bot("What kind of drink did you have?\n1. Water\n2. Juice\n3. Coffee"));
-            chatItems.add(new ChatItem.Options(Arrays.asList("1", "2", "3")));
-        } else if (currentIndex == 1 && Objects.equals(lastChosen, "2") && position.equals("1")) {
-            chatItems.add(new ChatItem.Bot("It's raining, so you should take an umbrella.\nThanks for chatting with me!"));
-        } else if (currentIndex == 1 && Objects.equals(lastChosen, "1") && position.equals("2")) {
-            chatItems.add(new ChatItem.Bot("You should drink something today!"));
-        } else if (currentIndex == 1 && Objects.equals(lastChosen, "2") && position.equals("2")) {
-            chatItems.add(new ChatItem.Bot("It's a nice day, so you can go out without an umbrella."));
-            chatItems.add(new ChatItem.Form());
+        if (currentIndex == 0) {
+            if (position.equals("1") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your STIPEND allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            } else if (position.equals("2") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your BOOK allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            } else if (position.equals("3") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your LAPTOP allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            } else if (position.equals("4") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your THESIS allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            } else if (position.equals("5") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your OJT allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            } else if (position.equals("6") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your ONE-TIME ATTENDANCE allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            } else if (position.equals("7") && lastChosen == null) {
+                chatItems.add(new ChatItem.Bot("Have you received your ONE-TIME FINANCIAL allowance?\n1. Yes\n2. No"));
+                chatItems.add(new ChatItem.Options(Arrays.asList("1", "2")));
+            }
+        } else if (currentIndex == 1) {
+            if (lastChosen.equals("1")) {
+                chatItems.add(new ChatItem.Bot("Congratulations! You have received your STIPEND allowance!"));
+                chatItems.add(new ChatItem.Form());
+            }
         }
 
         currentIndex++;
@@ -119,14 +132,6 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
         adapter.notifyItemInserted(chatItems.size() - 1);
         recyclerView.smoothScrollToPosition(chatItems.size() - 1);
 
-    }
-
-    private void notifyRecycler(String lastChosenSet) {
-        currentIndex++;
-        lastChosen = lastChosenSet;
-
-        adapter.notifyItemInserted(chatItems.size() - 1);
-        recyclerView.smoothScrollToPosition(chatItems.size() - 1);
     }
 
 }
