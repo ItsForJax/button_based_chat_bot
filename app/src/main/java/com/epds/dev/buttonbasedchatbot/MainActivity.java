@@ -1,7 +1,11 @@
 package com.epds.dev.buttonbasedchatbot;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -44,12 +48,8 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
 
         chatItems.add(new ChatItem.Bot(getString(R.string.allowance_type)));
         chatItems.add(new ChatItem.Options(Arrays.asList("1", "2", "3", "4", "5", "6", "7")));
-
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new ChatAdapter(this, chatItems, recyclerView, this, this, this);
-        recyclerView.setAdapter(adapter);
+        adapter = new ChatAdapter(this, chatItems, recyclerView, this, this, this); // Create your adapter
+        showDialog();
     }
 
     @Override
@@ -94,8 +94,12 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
 
     @Override
     public void onItemClick(String position) {
-        chatItems.remove(chatItems.size()-1);
-        adapter.notifyItemRemoved(chatItems.size());
+        Log.i("TESTING", "onItemClick: 1" );
+        chatItems.remove(chatItems.size() - 1);
+        if (adapter != null) { // Check if adapter is initialized
+            adapter.notifyItemRemoved(chatItems.size());
+            Log.i("TESTING", "onItemClick: 2" );
+        }
         boolean newInter = false;
         chatItems.add(new ChatItem.User("Selected: " + position));
         if (currentIndex == 0) {
@@ -215,5 +219,51 @@ public class MainActivity extends AppCompatActivity implements ChatAdapter.OnIte
 
     }
 
-}
+    private void showDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_chat);
 
+        // Get the device's screen size
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+
+        // Calculate the desired height and width for the dialog
+        int dialogHeight = (int) (screenHeight * 0.7); // 70% of the device's height
+        int dialogWidth = (int) (screenWidth * 0.9);   // 90% of the device's width
+
+        // Set fixed width and height for the dialog
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = dialogWidth;
+        layoutParams.height = dialogHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        recyclerView = dialog.findViewById(R.id.dialogRecyclerView);
+        Button cancelButton = dialog.findViewById(R.id.cancelButton);
+        Button submitButton = dialog.findViewById(R.id.submitButton);
+
+        // Setup your RecyclerView with a layout manager and adapter
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        // Set click listeners for the buttons
+        cancelButton.setOnClickListener(v -> {
+            // Handle cancel button click
+            dialog.dismiss();
+        });
+
+        submitButton.setOnClickListener(v -> {
+            // Handle submit button click
+            // Perform any actions needed
+            dialog.dismiss();
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
+
+
+}
